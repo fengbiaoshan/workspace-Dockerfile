@@ -9,7 +9,7 @@ RUN apt-get update --fix-missing && apt-get install -y wget vim bzip2 ca-certifi
     git mercurial
 
 RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
-    wget --quiet https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh -O ~/anaconda.sh && \
+    wget --quiet https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
     rm ~/anaconda.sh
 
@@ -22,7 +22,13 @@ RUN apt-get install -y curl grep sed dpkg && \
 
 RUN /opt/conda/bin/conda install jupyter -y --quiet && mkdir /opt/notebooks
 
+RUN /opt/conda/bin/conda install nb_conda -y
+
+RUN /opt/conda/bin/conda create -y -n py27 python=2.7 anaconda
+
 RUN /opt/conda/bin/pip install tensorflow
+
+RUN [ "/bin/bash", "-c", "source /opt/conda/bin/activate py27 && pip install tensorflow" ]
 
 RUN rm -rf /opt/notebooks
 VOLUME /opt/notebooks

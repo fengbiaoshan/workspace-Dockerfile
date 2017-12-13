@@ -22,6 +22,9 @@ RUN apt-get install -y curl grep sed dpkg && \
 
 RUN /opt/conda/bin/conda install jupyter -y --quiet && mkdir /opt/notebooks
 
+RUN /opt/conda/bin/conda install nb_conda -y
+
+RUN /opt/conda/bin/conda create -y -n py27 python=2.7 anaconda
 
 RUN rm -rf /opt/notebooks
 VOLUME /opt/notebooks
