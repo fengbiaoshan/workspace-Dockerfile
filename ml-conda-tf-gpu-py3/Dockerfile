@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM nvidia/cuda:8.0-cudnn6-devel-ubuntu16.04
 
 MAINTAINER Reck Mi <fengbiaoshan@gmail.com>
 
@@ -22,7 +22,7 @@ RUN apt-get install -y curl grep sed dpkg && \
 
 RUN /opt/conda/bin/conda install jupyter -y --quiet && mkdir /opt/notebooks
 
-RUN /opt/conda/bin/pip install tensorflow
+RUN /opt/conda/bin/pip install tensorflow-gpu
 
 RUN rm -rf /opt/notebooks
 VOLUME /opt/notebooks
@@ -31,6 +31,8 @@ WORKDIR /opt/notebooks
 COPY run_jupyter.sh /
 
 ENV PATH /opt/conda/bin:$PATH
+
+ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
 
