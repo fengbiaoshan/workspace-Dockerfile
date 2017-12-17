@@ -32,6 +32,8 @@ WORKDIR /opt/notebooks
 
 COPY run_jupyter.sh /
 
+RUN chmod +x /run_jupyter.sh
+
 ENV PATH /opt/conda/bin:$PATH
 
 ENTRYPOINT [ "/usr/bin/tini", "--" ]
