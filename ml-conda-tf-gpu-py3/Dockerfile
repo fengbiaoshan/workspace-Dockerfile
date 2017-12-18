@@ -12,6 +12,8 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
     wget --quiet https://repo.continuum.io/archive/Anaconda3-4.2.0-Linux-x86_64.sh -O ~/anaconda.sh && \
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
     rm ~/anaconda.sh
+    
+RUN /opt/conda/bin/pip install tensorflow-gpu
 
 RUN apt-get install -y curl grep sed dpkg && \
     TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
@@ -20,10 +22,9 @@ RUN apt-get install -y curl grep sed dpkg && \
     rm tini.deb && \
     apt-get clean
 
-RUN /opt/conda/bin/conda install jupyter -y --quiet && mkdir /opt/notebooks
+RUN /opt/conda/bin/conda update notebook -y
 
-RUN /opt/conda/bin/pip install tensorflow-gpu
-
+RUN mkdir /opt/notebooks
 RUN rm -rf /opt/notebooks
 VOLUME /opt/notebooks
 WORKDIR /opt/notebooks

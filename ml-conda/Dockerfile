@@ -13,6 +13,8 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
     /bin/bash ~/anaconda.sh -b -p /opt/conda && \
     rm ~/anaconda.sh
 
+RUN /opt/conda/bin/conda create -y -n py27 python=2.7 anaconda
+
 RUN apt-get install -y curl grep sed dpkg && \
     TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
     curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
@@ -20,12 +22,9 @@ RUN apt-get install -y curl grep sed dpkg && \
     rm tini.deb && \
     apt-get clean
 
-RUN /opt/conda/bin/conda install jupyter -y --quiet && mkdir /opt/notebooks
+RUN /opt/conda/bin/conda update notebook -y
 
-RUN /opt/conda/bin/conda install nb_conda -y
-
-RUN /opt/conda/bin/conda create -y -n py27 python=2.7 anaconda
-
+RUN mkdir /opt/notebooks
 RUN rm -rf /opt/notebooks
 VOLUME /opt/notebooks
 WORKDIR /opt/notebooks
